@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Net;
+using System.Reflection;
 using int3306;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,16 @@ const string baseApiPath = "api";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+if (Environment.GetEnvironmentVariable("PORT") != null)
+{
+    builder.WebHost.ConfigureKestrel(k =>
+    {
+        k.Listen(
+            IPAddress.Parse("0.0.0.0"), 
+            int.TryParse(Environment.GetEnvironmentVariable("PORT"), out var port) ? port : 0
+        );
+    });
+}
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContextPool<DataDbContext>(opt =>
