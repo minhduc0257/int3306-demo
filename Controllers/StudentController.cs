@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -5,6 +6,7 @@ namespace int3306.Controllers
 {
     [ApiController]
     [Route("students")]
+    [EnableCors]
     public class StudentController : Controller
     {
         private readonly DataDbContext dbContext;

@@ -17,6 +17,17 @@ if (Environment.GetEnvironmentVariable("PORT") != null)
         );
     });
 }
+
+builder.Services.AddCors(cors =>
+{
+    cors.AddDefaultPolicy(
+        policyBuilder => policyBuilder
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .SetIsOriginAllowed(_ => true)
+    );
+});
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContextPool<DataDbContext>(opt =>
@@ -43,6 +54,7 @@ app.Map($"/{baseApiPath}", appBuilder =>
 {
     appBuilder.UseRouting();
     appBuilder.UseAuthorization();
+    appBuilder.UseCors();
     appBuilder.UseEndpoints(endpoints =>
     {
         endpoints.MapControllerRoute(
